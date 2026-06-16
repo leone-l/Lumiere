@@ -301,11 +301,24 @@ $settings = get_settings();
 $contacts = $pdo->query('SELECT * FROM contacts ORDER BY sort ASC')->fetchAll();
 ?>
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>管理后台 — <?= e(SITE_NAME()) ?></title>
+<script>
+  (function() {
+    var saved = localStorage.getItem('theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  })();
+  function toggleTheme() {
+    var html = document.documentElement;
+    var current = html.getAttribute('data-theme');
+    var newTheme = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+  }
+</script>
 <style>
 <?= inline_css() ?>
 
@@ -318,16 +331,25 @@ $contacts = $pdo->query('SELECT * FROM contacts ORDER BY sort ASC')->fetchAll();
   --max: 1400px; --nav-h: 72px;
   --ease: cubic-bezier(.22,.61,.36,1);
 }
+[data-theme="light"] {
+  --bg-0: #ffffff; --bg-1: #f8f8f8; --bg-2: #f0f0f0;
+  --line: rgba(0,0,0,0.08); --line-strong: rgba(0,0,0,0.15);
+  --text: #1a1a1a; --text-soft: #4a4a4a; --text-dim: #888;
+  --accent: #000; --success: #22c55e;
+}
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
   font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--text);
-  background: linear-gradient(180deg, #000 0%, #0a0a0a 40%, #0d0d0d 100%);
+  background:
+    radial-gradient(1200px 800px at 85% -10%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
+    linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 40%, var(--bg-2) 100%);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   display: flex;
   flex-direction: column;
+  transition: background .3s var(--ease), color .3s var(--ease);
 }
 a { color: inherit; text-decoration: none; transition: opacity .2s; }
 a:hover { opacity: .7; }
@@ -337,8 +359,8 @@ img { max-width: 100%; display: block; }
 .admin-topbar {
   position: sticky; top: 0; z-index: 100;
   height: var(--nav-h);
-  backdrop-filter: blur(12px);
-  background: rgba(5,5,5,0.8);
+  backdrop-filter: saturate(160%) blur(10px);
+  background: color-mix(in srgb, var(--bg-1) 80%, transparent);
   border-bottom: 1px solid var(--line);
   display: flex; align-items: center;
   padding: 0 40px;
@@ -389,13 +411,14 @@ img { max-width: 100%; display: block; }
   border-left: 2px solid transparent;
   transition: all .25s var(--ease);
 }
-.sidebar-nav a:hover { color: var(--text); background: rgba(255,255,255,0.03); opacity: 1; }
+.sidebar-nav a:hover { color: var(--text); background: color-mix(in srgb, var(--accent) 5%, transparent); opacity: 1; }
 .sidebar-nav a.active {
   color: var(--text);
-  background: rgba(255,255,255,0.04);
-  border-left-color: #fff;
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  border-left-color: var(--accent);
 }
 .sidebar-nav a svg { width: 16px; height: 16px; flex-shrink: 0; opacity: .7; }
+.msg-badge { background: var(--accent); color: var(--bg-0); font-size: 10px; padding: 2px 7px; border-radius: 0; margin-left: 4px; }
 
 /* ── 主内容 ── */
 .admin-main {
@@ -420,14 +443,14 @@ img { max-width: 100%; display: block; }
   padding: 14px 18px; margin-bottom: 24px;
   border: 1px solid; font-size: 13px; letter-spacing: 0.05em;
 }
-.flash.ok { color: var(--success); border-color: rgba(125,216,168,0.3); background: rgba(125,216,168,0.05); }
-.flash.err { color: var(--danger); border-color: rgba(255,107,107,0.3); background: rgba(255,107,107,0.05); }
+.flash.ok { color: var(--success); border-color: color-mix(in srgb, var(--success) 30%, transparent); background: color-mix(in srgb, var(--success) 8%, transparent); }
+.flash.err { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 30%, transparent); background: color-mix(in srgb, var(--danger) 8%, transparent); }
 
 /* ── 统计卡片 ── */
 .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 50px; }
 .stat-card {
   border: 1px solid var(--line-strong); padding: 28px 24px;
-  background: rgba(255,255,255,0.01);
+  background: color-mix(in srgb, var(--accent) 3%, transparent);
 }
 .stat-card .num {
   font-family: 'Cormorant Garamond', serif;
@@ -458,7 +481,7 @@ img { max-width: 100%; display: block; }
 .form-group textarea { min-height: 100px; resize: vertical; }
 .form-group input[type="url"] { color: var(--text-soft); font-size: 13px; }
 .form-group input::placeholder { color: var(--text-dim); }
-.form-group select { appearance: none; cursor: pointer; background: #0a0a0a; }
+.form-group select { appearance: none; cursor: pointer; background: color-mix(in srgb, var(--bg-2) 70%, var(--bg-1)); }
 
 /* ── 按钮 ── */
 .btn {
@@ -469,12 +492,12 @@ img { max-width: 100%; display: block; }
   cursor: pointer; transition: all .3s var(--ease); font-weight: 500;
   background: transparent;
 }
-.btn:hover { background: rgba(255,255,255,0.05); color: var(--text); border-color: var(--text-soft); }
-.btn-primary { background: #fff; color: #000; border-color: #fff; }
-.btn-primary:hover { background: transparent; color: #fff; }
+.btn:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); color: var(--text); border-color: var(--text-soft); }
+.btn-primary { background: var(--accent); color: var(--bg-0); border-color: var(--accent); }
+.btn-primary:hover { background: transparent; color: var(--accent); }
 .btn-sm { padding: 8px 14px; font-size: 11px; }
-.btn-danger { color: var(--danger); border-color: rgba(255,107,107,0.3); }
-.btn-danger:hover { background: rgba(255,107,107,0.08); border-color: var(--danger); }
+.btn-danger { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 30%, transparent); }
+.btn-danger:hover { background: color-mix(in srgb, var(--danger) 8%, transparent); border-color: var(--danger); }
 
 /* ── 表格 ── */
 .table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -486,17 +509,17 @@ img { max-width: 100%; display: block; }
   font-size: 11px; letter-spacing: 0.3em; color: var(--text-dim);
   text-transform: uppercase; font-weight: 500;
 }
-.table tr:hover td { background: rgba(255,255,255,0.015); }
+.table tr:hover td { background: color-mix(in srgb, var(--accent) 3%, transparent); }
 .table td img {
   width: 72px; height: 48px; object-fit: cover;
-  filter: grayscale(1); border: 1px solid var(--line);
+  border: 1px solid var(--line);
 }
 .table .small { color: var(--text-dim); font-size: 11px; letter-spacing: .1em; }
 
 /* ── 区块卡片 ── */
 .card {
   border: 1px solid var(--line); padding: 28px;
-  background: rgba(255,255,255,0.01); margin-bottom: 24px;
+  background: color-mix(in srgb, var(--accent) 2%, transparent); margin-bottom: 24px;
 }
 .card-title {
   font-family: 'Cormorant Garamond', serif;
@@ -509,13 +532,13 @@ img { max-width: 100%; display: block; }
 .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; margin-top: 20px; }
 .photo-item {
   position: relative; aspect-ratio: 3/2;
-  background: #111; border: 1px solid var(--line);
+  background: var(--bg-2); border: 1px solid var(--line);
   overflow: hidden;
 }
-.photo-item img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); }
+.photo-item img { width: 100%; height: 100%; object-fit: cover; }
 .photo-item .del {
   position: absolute; top: 6px; right: 6px;
-  background: rgba(0,0,0,0.7); border: 1px solid rgba(255,107,107,0.4);
+  background: color-mix(in srgb, var(--bg-0) 80%, transparent); border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent);
   color: var(--danger); font-size: 10px; letter-spacing: 0.2em;
   padding: 4px 8px; cursor: pointer; display: none;
   font-family: inherit;
@@ -525,7 +548,7 @@ img { max-width: 100%; display: block; }
 /* ── 留言卡片 ── */
 .msg-item {
   border: 1px solid var(--line); padding: 22px; margin-bottom: 16px;
-  background: rgba(255,255,255,0.01);
+  background: color-mix(in srgb, var(--accent) 2%, transparent);
 }
 .msg-item .msg-head {
   display: flex; justify-content: space-between; align-items: center;
@@ -545,7 +568,7 @@ img { max-width: 100%; display: block; }
   .admin-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--line); padding: 16px 0; }
   .sidebar-nav { flex-direction: row; overflow-x: auto; gap: 0; }
   .sidebar-nav a { white-space: nowrap; border-left: 0; border-bottom: 2px solid transparent; padding: 10px 16px; }
-  .sidebar-nav a.active { border-left-color: transparent; border-bottom-color: #fff; }
+  .sidebar-nav a.active { border-left-color: transparent; border-bottom-color: var(--accent); }
   .admin-main { padding: 28px 0; }
   .form-grid { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
@@ -563,6 +586,9 @@ img { max-width: 100%; display: block; }
   </div>
   <ul class="admin-topnav" style="display:flex; align-items:center; gap:28px; margin:0; padding:0;">
     <li><a href="<?= site_url('/') ?>" target="_blank">预览网站 →</a></li>
+    <li>
+      <button type="button" class="admin-theme-toggle" onclick="toggleTheme()" style="background:none;border:1px solid var(--line);color:var(--text-dim);font:inherit;font-size:12px;letter-spacing:.2em;cursor:pointer;padding:6px 12px;transition:all .3s ease;">◐ 主题</button>
+    </li>
     <li>
       <form method="post" style="display:inline;">
         <input type="hidden" name="action" value="logout">
@@ -600,7 +626,7 @@ img { max-width: 100%; display: block; }
       </a>
       <a href="?tab=messages" class="<?= $tab === 'messages' ? 'active' : '' ?>">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        留言管理 <?php if ($stats['messages']): ?><span style="background:#fff;color:#000;font-size:10px;padding:2px 7px;border-radius:0;margin-left:4px;"><?= $stats['messages'] ?></span><?php endif; ?>
+        留言管理 <?php if ($stats['messages']): ?><span class="msg-badge"><?= $stats['messages'] ?></span><?php endif; ?>
       </a>
       <a href="?tab=account" class="<?= $tab === 'account' ? 'active' : '' ?>">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -1235,7 +1261,7 @@ document.addEventListener('keydown', function(e) {
 .modal {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.8);
+  background: color-mix(in srgb, var(--bg-0) 85%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1276,7 +1302,7 @@ document.addEventListener('keydown', function(e) {
   transition: all 0.2s ease;
 }
 .photo-item:hover {
-  border-color: rgba(255,255,255,0.3);
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
 }
 .photo-item.selected {
   border-color: var(--accent) !important;
@@ -1300,7 +1326,7 @@ document.addEventListener('keydown', function(e) {
   transition: opacity 0.2s ease;
 }
 .check-icon {
-  color: #000;
+  color: var(--bg-0);
   font-size: 16px;
   font-weight: bold;
 }
@@ -1315,9 +1341,9 @@ document.addEventListener('keydown', function(e) {
   display: flex;
 }
 .btn-edit {
-  background: rgba(0,0,0,0.8);
+  background: color-mix(in srgb, var(--bg-0) 80%, transparent);
   border: none;
-  color: #fff;
+  color: var(--text);
   font-size: 11px;
   padding: 6px 12px;
   cursor: pointer;
@@ -1325,7 +1351,7 @@ document.addEventListener('keydown', function(e) {
 }
 .btn-edit:hover {
   background: var(--accent);
-  color: #000;
+  color: var(--bg-0);
 }
 </style>
 

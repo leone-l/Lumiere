@@ -60,7 +60,7 @@ include __DIR__ . '/partials/header.php';
             $span = $pattern[$k % count($pattern)];
           ?>
             <div class="photo <?= $span ?>">
-              <div class="img" data-bg="<?= e($p['url']) ?>"></div>
+              <img src="<?= e($p['url']) ?>" alt="<?= e($p['title']) ?>" loading="lazy">
               <div class="caption"><?= e($p['title']) ?></div>
             </div>
           <?php endforeach; ?>
@@ -71,3 +71,19 @@ include __DIR__ . '/partials/header.php';
 </section>
 
 <?php include __DIR__ . '/partials/footer.php'; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.photo img').forEach(img => {
+    if (img.complete && img.naturalWidth > 0) {
+      img.style.opacity = '1';
+    } else {
+      img.style.opacity = '0';
+      img.onload = function() {
+        img.style.transition = 'opacity .5s ease';
+        img.style.opacity = '1';
+      };
+    }
+  });
+});
+</script>
