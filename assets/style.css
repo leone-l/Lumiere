@@ -488,7 +488,6 @@ img { max-width: 100%; display: block; }
   width: 100%; height: 100%;
   background-size: cover; background-position: center 20%;
   background-color: var(--bg-2);
-  filter: grayscale(1) contrast(1.05);
   transition: opacity .8s var(--ease);
 }
 .about-bio h1 {

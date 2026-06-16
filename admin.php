@@ -257,7 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             flash_set('请填写标签和值。', 'err');
         }
-        header('Location: ' . site_url('/admin.php') . '?tab=pages'); exit;
+        header('Location: ' . site_url('/admin.php') . '?tab=social'); exit;
     }
 
     // 编辑联系方式
@@ -272,7 +272,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->prepare('UPDATE contacts SET label = ?, value = ?, icon = ?, url = ?, sort = ? WHERE id = ?')->execute([$label, $value, $icon, $url, $sort, $id]);
             flash_set('联系方式已更新。', 'ok');
         }
-        header('Location: ' . site_url('/admin.php') . '?tab=pages'); exit;
+        header('Location: ' . site_url('/admin.php') . '?tab=social'); exit;
     }
 
     // 删除联系方式
@@ -282,7 +282,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->prepare('DELETE FROM contacts WHERE id = ?')->execute([$id]);
             flash_set('联系方式已删除。', 'ok');
         }
-        header('Location: ' . site_url('/admin.php') . '?tab=pages'); exit;
+        header('Location: ' . site_url('/admin.php') . '?tab=social'); exit;
     }
 }
 
