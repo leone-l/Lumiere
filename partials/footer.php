@@ -17,10 +17,9 @@
     <div class="foot-col">
       <div class="foot-title">联系</div>
       <ul class="social">
-        <li>QQ · <?= e(SOCIAL_QQ()) ?></li>
-        <li>WeChat · <?= e(SOCIAL_WECHAT()) ?></li>
-        <li>Behance · <?= e(SOCIAL_BEHANCE()) ?></li>
-        <li>Email · <?= e(SOCIAL_EMAIL()) ?></li>
+        <?php foreach (get_contacts() as $c): ?>
+          <li><?= e($c['label']) ?> · <?= e($c['value']) ?></li>
+        <?php endforeach; ?>
       </ul>
     </div>
     <div class="foot-col foot-copy">
