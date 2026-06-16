@@ -26,6 +26,7 @@
 
 ## 技术栈
 
+- **工具**:TRAE
 - **后端**: PHP + SQLite (PDO)
 - **前端**: HTML5 + CSS3 + Vanilla JavaScript
 - **字体**: Cormorant Garamond (标题) + Inter/Noto Sans SC (正文)
