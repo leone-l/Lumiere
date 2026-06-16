@@ -774,20 +774,110 @@ img { max-width: 100%; display: block; }
   .admin-grid { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 720px) {
-  :root { --nav-h: 64px; }
-  .section { padding: 80px 0; }
-  .nav-links { gap: 18px; font-size: 11px; }
-  .nav-links a { letter-spacing: 0.22em; }
-  .category-list { grid-template-columns: 1fr; }
-  .grid { grid-auto-rows: 90px; gap: 12px; }
-  .span-8, .span-9, .span-7 { grid-column: span 12; grid-row: span 4; }
-  .span-6, .span-5, .span-4 { grid-column: span 12; grid-row: span 4; }
-  .span-3, .span-2 { grid-column: span 6; grid-row: span 3; }
-  .about-meta { grid-template-columns: 1fr 1fr; }
-  .footer-inner { grid-template-columns: 1fr; }
-  .foot-copy { justify-self: start; }
+@media (max-width: 768px) {
+  :root { --nav-h: 60px; --gap: 20px; }
+
+  /* 导航 */
+  .container { padding: 0 16px; }
+  .nav-bar { gap: 12px; }
+  .nav-links { gap: 14px; font-size: 10px; letter-spacing: 0.15em; }
+  .nav-links a { padding: 4px 0; }
+  .brand-cn { font-size: 18px; letter-spacing: 0.25em; }
+  .brand-en { font-size: 9px; }
+  .theme-toggle { display: none; }
+
+  /* Hero */
   .hero { min-height: calc(100svh - var(--nav-h)); }
+  .hero-inner { padding: 60px 20px; }
+  .hero h1 { font-size: clamp(48px, 15vw, 80px); }
+  .hero .kicker { font-size: 10px; letter-spacing: 0.4em; margin-bottom: 20px; }
+  .hero .divider { height: 40px; margin: 24px auto; }
+  .hero .subtitle { font-size: 12px; letter-spacing: 0.35em; }
+  .hero-scroll { font-size: 9px; bottom: 24px; }
+
+  /* 区块 */
+  .section { padding: 60px 0; }
+  .section-head { margin-bottom: 36px; }
+  .section-head h2 { font-size: clamp(28px, 8vw, 40px); margin: 10px 0; }
+  .section-head p { font-size: 13px; }
+
+  /* 分类列表 */
+  .category-list { grid-template-columns: 1fr; gap: 16px; }
+  .category-card { aspect-ratio: 4 / 3; }
+  .category-card .meta { padding: 16px; }
+  .category-card h3 { font-size: 16px; margin-bottom: 6px; }
+  .category-card p { font-size: 12px; display: none; }
+  .category-card .num { font-size: 11px; }
+
+  /* 作品网格 */
+  .grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 100px; gap: 10px; }
+  .span-8, .span-9, .span-7 { grid-column: span 2; grid-row: span 3; }
+  .span-6, .span-5, .span-4 { grid-column: span 2; grid-row: span 3; }
+  .span-3, .span-2 { grid-column: span 1; grid-row: span 2; }
+
+  /* 关于页 */
+  .about { grid-template-columns: 1fr; gap: 32px; padding: 0 0 60px; }
+  .avatar { position: static; max-width: 280px; margin: 0 auto; width: 100%; }
+  .about-bio { padding: 0 4px; }
+  .about-bio h1 { font-size: clamp(36px, 10vw, 56px); }
+  .about-bio p { font-size: 13px; line-height: 1.8; }
+  .about-meta { grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 32px; }
+  .about-meta .cell { padding: 16px; }
+  .about-meta .num { font-size: 28px; }
+  .about-meta .label { font-size: 10px; }
+
+  /* 联系页 */
+  .contact { grid-template-columns: 1fr; gap: 40px; padding: 0 0 60px; }
+  .contact-side { border-top: 1px solid var(--line); padding: 32px 0 0; }
+  .social-list li { flex-direction: column; gap: 4px; align-items: flex-start; }
+  .social-list .label { font-size: 10px; }
+  .social-list span, .social-list a { font-size: 13px; }
+  .form { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-full { grid-column: span 1; }
+
+  /* 按钮 */
+  .btn { padding: 12px 20px; font-size: 11px; }
+  a.btn { display: inline-flex; width: fit-content; }
+
+  /* 页脚 */
+  .site-footer { margin-top: 50px; padding: 40px 0 30px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+  .foot-copy { justify-self: start; grid-row: 1; }
+  .foot-desc { font-size: 12px; margin-top: 0; }
+
+  /* 后台 */
+  .admin-grid { grid-template-columns: 1fr; }
+  .admin-grid .card:first-child { grid-column: span 1; }
+  .sidebar { width: 200px; }
+  .main { margin-left: 200px; }
+  .sidebar-nav a { font-size: 11px; padding: 10px 12px; }
+  .card { padding: 16px; }
+  .card-title { font-size: 12px; margin-bottom: 12px; }
+  .form-group input, .form-group select, .form-group textarea { font-size: 13px; }
+  .table { font-size: 12px; }
+  .table th, .table td { padding: 8px 6px; }
+}
+
+@media (max-width: 480px) {
+  :root { --nav-h: 56px; }
+
+  .nav-links { gap: 10px; font-size: 9px; }
+  .brand-cn { font-size: 16px; }
+  .brand-en { display: none; }
+
+  .hero h1 { font-size: clamp(40px, 16vw, 60px); }
+  .hero-scroll { display: none; }
+
+  .category-list { gap: 12px; }
+  .grid { grid-template-columns: 1fr; grid-auto-rows: 140px; }
+  .span-8, .span-9, .span-7,
+  .span-6, .span-5, .span-4,
+  .span-3, .span-2 { grid-column: span 1; grid-row: span 2; }
+
+  .about-meta { grid-template-columns: 1fr; }
+
+  .form-grid { gap: 12px; }
 }
 
 /* ---------- Reveal on scroll ---------- */
