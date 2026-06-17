@@ -20,11 +20,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?><!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>登录 — <?= e(SITE_TITLE()) ?></title>
+<script>
+  (function() {
+    var saved = localStorage.getItem('theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  })();
+</script>
 <style>
 <?= inline_css() ?>
 
@@ -37,14 +43,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   --radius: 0; --max: 1360px; --nav-h: 72px;
   --ease: cubic-bezier(.22,.61,.36,1);
 }
+[data-theme="light"] {
+  --bg-0: #ffffff; --bg-1: #f8f8f8; --bg-2: #f0f0f0;
+  --line: rgba(0,0,0,0.08); --line-strong: rgba(0,0,0,0.15);
+  --text: #1a1a1a; --text-soft: #4a4a4a; --text-dim: #888;
+  --accent: #000;
+}
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
   font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--text);
-  background: radial-gradient(ellipse at 20% 20%, rgba(255,255,255,0.06) 0%, transparent 55%),
-              radial-gradient(ellipse at 80% 80%, rgba(255,255,255,0.05) 0%, transparent 55%),
-              linear-gradient(180deg, #000 0%, #0a0a0a 50%, #050505 100%);
+  background:
+    radial-gradient(ellipse at 20% 20%, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 80%, color-mix(in srgb, var(--accent) 5%, transparent) 0%, transparent 55%),
+    linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 50%, var(--bg-2) 100%);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   display: flex;
@@ -87,7 +100,7 @@ img { max-width: 100%; display: block; }
 .login-card {
   border: 1px solid var(--line-strong);
   padding: 40px;
-  background: rgba(255,255,255,0.01);
+  background: color-mix(in srgb, var(--accent) 2%, transparent);
   backdrop-filter: blur(10px);
 }
 
@@ -125,9 +138,9 @@ img { max-width: 100%; display: block; }
 .login-btn {
   width: 100%;
   padding: 15px;
-  background: #fff;
-  color: #000;
-  border: 1px solid #fff;
+  background: var(--accent);
+  color: var(--bg-0);
+  border: 1px solid var(--accent);
   letter-spacing: 0.35em;
   font-size: 12px;
   text-transform: uppercase;
@@ -139,12 +152,12 @@ img { max-width: 100%; display: block; }
 }
 .login-btn:hover {
   background: transparent;
-  color: #fff;
+  color: var(--accent);
 }
 
 .error-msg {
   padding: 12px 16px;
-  border: 1px solid rgba(255,107,107,0.3);
+  border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
   color: var(--danger);
   font-size: 13px;
   margin-bottom: 20px;

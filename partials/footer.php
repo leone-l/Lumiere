@@ -3,7 +3,7 @@
   <div class="container footer-inner">
     <div class="foot-col">
       <div class="brand-cn"><?= e(SITE_NAME()) ?></div>
-      <p class="foot-desc"><?= e(AUTHOR_ROLE()) ?> —— 在光与影之间，寻迹生活的质地。</p>
+      <p class="foot-desc"><?= e(FOOTER_DESC()) ?></p>
     </div>
     <div class="foot-col">
       <div class="foot-title">导航</div>
